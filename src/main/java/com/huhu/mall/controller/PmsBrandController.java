@@ -5,8 +5,11 @@ import com.huhu.mall.mbg.model.PmsBrand;
 import com.huhu.mall.service.PmsBrandService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,6 +18,8 @@ import java.util.List;
 @Controller
 @RequestMapping("/brand")
 public class PmsBrandController {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(PmsBrandController.class);
 
     @Autowired
     private PmsBrandService brandService;
@@ -34,8 +39,25 @@ public class PmsBrandController {
         int count = brandService.createBrand(pmsBrand);
         if (count == 1) {
             commonResult = CommonResult.success(pmsBrand);
+            LOGGER.debug("createBrand success:{}", pmsBrand);
         } else {
             commonResult = CommonResult.failed("操作失败");
+            LOGGER.debug("createBrand failed:{}", pmsBrand);
+        }
+        return commonResult;
+    }
+
+    @RequestMapping(value = "/update/{id}", method = RequestMethod.POST)
+    @ResponseBody
+    public CommonResult updateBrand(@PathVariable("id") Long id, @RequestBody PmsBrand pmsBrandDto, BindingResult result) {
+        CommonResult commonResult;
+        int count = brandService.updateBrand(id, pmsBrandDto);
+        if (count == 1) {
+            commonResult = CommonResult.success(pmsBrandDto);
+            LOGGER.debug("updateBrand success:{}", pmsBrandDto);
+        } else {
+            commonResult = CommonResult.failed("操作失败");
+            LOGGER.debug("updateBrand fail:{}", pmsBrandDto);
         }
         return commonResult;
     }
