@@ -7,10 +7,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -27,5 +24,19 @@ public class PmsBrandController {
     @ResponseBody
     public CommonResult<List<PmsBrand>> getBrandList() {
         return CommonResult.success(brandService.listAllBrand());
+    }
+
+    @ApiOperation("添加品牌")
+    @RequestMapping(value = "/create", method = RequestMethod.POST)
+    @ResponseBody
+    public CommonResult createBrand(@RequestBody PmsBrand pmsBrand) {
+        CommonResult commonResult;
+        int count = brandService.createBrand(pmsBrand);
+        if (count == 1) {
+            commonResult = CommonResult.success(pmsBrand);
+        } else {
+            commonResult = CommonResult.failed("操作失败");
+        }
+        return commonResult;
     }
 }
