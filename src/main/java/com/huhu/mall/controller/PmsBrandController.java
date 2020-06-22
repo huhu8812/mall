@@ -28,6 +28,7 @@ public class PmsBrandController {
     @RequestMapping(value = "/listAll", method = RequestMethod.GET)
     @ResponseBody
     public CommonResult<List<PmsBrand>> getBrandList() {
+        LOGGER.info("get brand");
         return CommonResult.success(brandService.listAllBrand());
     }
 
@@ -39,6 +40,7 @@ public class PmsBrandController {
         int count = brandService.createBrand(pmsBrand);
         if (count == 1) {
             commonResult = CommonResult.success(pmsBrand);
+            LOGGER.info("create brand");
             LOGGER.debug("createBrand success:{}", pmsBrand);
         } else {
             commonResult = CommonResult.failed("操作失败");
